@@ -2,7 +2,8 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 
-import shoppingCartRouter from "./routes/shoppingCart.js";
+import productsRouter from "./routes/productsRoute.js";
+import shoppingCartRouter from "./routes/shoppingCartRoute.js";
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+app.use("/products", productsRouter);
 app.use("/shopping-cart", shoppingCartRouter);
 
 app.get("/", (req, res) => {
