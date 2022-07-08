@@ -2,6 +2,7 @@ import express from "express";
 
 import validateToken from "../middlewares/tokenValidation.js";
 import {
+    getShoppingCart,
     insertProductToCart,
     removeProductInCart,
     addProductCounter,
@@ -10,6 +11,7 @@ import {
 
 const router = express.Router();
 
+router.get("/", validateToken, getShoppingCart);
 router.post("/", validateToken, insertProductToCart);
 router.delete("/:ID", validateToken, removeProductInCart);
 router.put("/:ID/add", validateToken, addProductCounter);

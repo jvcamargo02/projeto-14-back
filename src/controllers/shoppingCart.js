@@ -2,6 +2,31 @@ import { ObjectId } from "mongodb";
 
 import getDb from "../dbStrategy/mongo.js";
 
+export async function getShoppingCart(req, res) {
+    const user = res.locals.user;
+
+    try {
+        const db = getDb();
+
+        const cart = await db.collection("shopping-carts-teste").findOne({
+            userId: user._id
+        });
+
+        if (!cart) return res.status(404).send();
+
+        const plan = await db.collection("plans-teste").findOne({
+            name: user.plan
+        });
+
+        if (!plan) return res.status(404).send();
+
+        res.status(201).send({ cart: cart.cart, limit: plan.limit });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error while getting shopping cart list");
+    }
+}
+
 export async function insertProductToCart(req, res) {
     const user = res.locals.user;
     const productId = req.body.productId;
@@ -83,7 +108,7 @@ export async function addProductCounter(req, res) {
             _id: ObjectId(ID)
         });
 
-        if (!product) return res.status(404).send();
+        if (!product) return res.status(404).send("aaa");
 
         const cart = await db.collection("shopping-carts-teste").findOne(
             {
@@ -93,7 +118,7 @@ export async function addProductCounter(req, res) {
             { "cart.$": 1 }
         );
 
-        if (!cart) return res.status(404).send();
+        if (!cart) return res.status(404).send("bbbb");
 
         await db
             .collection("shopping-carts-teste")
