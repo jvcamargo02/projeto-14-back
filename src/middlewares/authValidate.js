@@ -1,1 +1,1 @@
-import { db } from "../dbStrategy/mongo.js"
+import db from "../dbStrategy/mongo.js";
