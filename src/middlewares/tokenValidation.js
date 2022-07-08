@@ -1,5 +1,3 @@
-import { ObjectId } from "mongodb";
-
 import getDb from "../dbStrategy/mongo.js";
 
 export default async function validateToken(req, res, next) {
