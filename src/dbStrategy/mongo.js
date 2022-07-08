@@ -6,7 +6,8 @@ dotenv.config();
 const mongoClient = new MongoClient(process.env.MONGO_URI);
 let db;
 mongoClient.connect(() => {
-  db = mongoClient.db(process.env.MONGO_DATABASE);
-});
+	db = mongoClient.db(process.env.MONGO_DATABASE);
+})
+promisse.then(() => console.log("conectei"))
 
-export default db
+export {db};
