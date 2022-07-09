@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 
+import authRoute from "./routes/authRoute.js"
 import productsRouter from "./routes/productsRoute.js";
 import shoppingCartRouter from "./routes/shoppingCartRoute.js";
 
@@ -11,6 +12,8 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
+
+app.use(authRoute)
 
 app.use("/products", productsRouter);
 app.use("/shopping-cart", shoppingCartRouter);
