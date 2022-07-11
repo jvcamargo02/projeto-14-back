@@ -4,8 +4,9 @@ import joi from "joi";
 
 export async function signUpValidate(req, res, next) {
     const db = getDb();
-    const { name, email, password, selectPlanId, userPaymentData } = req.body;
+    const { name, email, password, selectPlanId, capsules } = req.body;
     const { cvc, expiry, cardName, number } = req.body.userPaymentData;
+    const { address, city, state, zip } = req.body.userAddress;
     const user = await db.collection("users").findOne({ email });
 
     const signUpSchema = joi.object({
@@ -13,7 +14,9 @@ export async function signUpValidate(req, res, next) {
         email: joi.string().email().required(),
         password: joi.string().required(),
         selectPlanId: joi.number().required(),
-        userPaymentData: joi.object().required()
+        capsules: joi.string().required(),
+        userPaymentData: joi.object().required(),
+        userAddress: joi.object().required()
     });
 
     const paymentSchema = joi.object({
@@ -23,13 +26,19 @@ export async function signUpValidate(req, res, next) {
         number: joi.string().required()
     });
 
+    const shippingSchema = joi.object({
+        address: joi.string().required(),
+        city: joi.string().required(),
+        state: joi.string().required(),
+        zip: joi.string().required()
+    });
+
     const signUpValidate = signUpSchema.validate(req.body);
     const paymentValidate = paymentSchema.validate(req.body.userPaymentData);
+    const addressValidate = shippingSchema.validate(req.body.userAddress);
 
-    if (signUpValidate.error || paymentValidate.error) {
-        return res
-            .status(406)
-            .send(paymentValidate.error.details.message || signUpValidate.error.details.message);
+    if (signUpValidate.error || paymentValidate.error || addressValidate.error) {
+        return res.status(406).send("Confirm that all data is entered correctly");
     }
 
     if (user) {
@@ -47,6 +56,13 @@ export async function signUpValidate(req, res, next) {
         name,
         password: passwordCrypt,
         selectPlanId,
+        capsules,
+        userAddress: {
+            address,
+            city,
+            state,
+            zip
+        },
         userPaymentData: {
             expiry,
             cardName,
