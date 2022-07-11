@@ -1,4 +1,5 @@
 import getDb from "../dbStrategy/mongo.js";
+import dayjs from "dayjs";
 import { v4 as uuid } from "uuid";
 
 export async function signUp(req, res) {
@@ -6,13 +7,18 @@ export async function signUp(req, res) {
 
     try {
         const db = getDb();
-        await db
-            .collection("users")
-            .insertOne({ ...userData, remainingDeliveries: userData.selectPlanId * 4 });
+        const validation = await db.collection("plans").findOne({
+            selectPlanId: userData.selectPlanId
+        });
+
+        await db.collection("users").insertOne({
+            ...userData,
+            validation: dayjs().add(validation.monthsTillExpire, "month").format("DD/MM/YY")
+        });
 
         const newUser = await db.collection("users").findOne(userData);
 
-        await db.collection("shopping-cart").insertOne({
+        await db.collection("shopping-carts").insertOne({
             userId: newUser._id,
             cart: [],
             lastPurchaseDate: ""
