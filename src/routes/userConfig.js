@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { signUp, login } from '../controllers/authController.js';
-import { signUpValidate, loginValidate } from '../middlewares/authValidate.js';
 import validateToken from '../middlewares/tokenValidation.js';
-import { getData } from '../controllers/userConfiguration.js'; 
+import { getData, putData } from '../controllers/userConfiguration.js';
+import {validateTokenConfig, confirmPassword} from "../middlewares/userConfig.js"
 
 const router = Router();
 
 router.get('/user-config', validateToken, getData);
+router.put('/user-config', validateTokenConfig, confirmPassword, putData);
 
 export default router; 

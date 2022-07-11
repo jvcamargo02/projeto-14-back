@@ -12,13 +12,13 @@ console.log(token)
 			token,
 		});
 
-		if (!session) return res.status(401).send('Não tem sessão');
+		if (!session) return res.status(401).send('Token expired or invalid. You have to reconnect to the site');
 
 		const user = await db.collection('users').findOne({
 			_id: session.userId,
 		});
 
-		if (!user) return res.status(401).send("Token expired or invalid. You have to reconnect to the site");
+		if (!user) return res.status(401).send();
 
 
 		delete user.password;
