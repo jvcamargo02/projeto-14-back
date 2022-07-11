@@ -182,6 +182,14 @@ export async function confirmPurchase(req, res) {
 
         for (let i = 0; i < 7; i++) {
             const date = dayjs().day(i).format("DD/MM/YY");
+            if (date > user.validation) {
+                return res
+                    .status(409)
+                    .send(
+                        "Your plan has expired :( If you wish to continue using our services, please consider renewing your plan."
+                    );
+            }
+
             if (date === cart.lastPurchaseDate)
                 return res
                     .status(409)
@@ -194,7 +202,7 @@ export async function confirmPurchase(req, res) {
             {
                 userId: user._id
             },
-            { $set: { lastPurchaseDate: dayjs().format("DD/MM/YY") } }
+            { $set: { cart: [], lastPurchaseDate: dayjs().format("DD/MM/YY") } }
         );
 
         res.status(201).send();
