@@ -24,6 +24,11 @@ export async function signUp(req, res) {
             lastPurchaseDate: ""
         });
 
+        await db.collection("shopping-history").insertOne({
+            userId: newUser._id,
+            history: []
+        });
+
         res.status(201).send("Created user");
     } catch {
         res.status(500).send("An error occurred. Please try again later.");
