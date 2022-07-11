@@ -12,8 +12,6 @@ export async function getProductsList(req, res) {
 
         if (!plan) return res.status(404).send();
 
-        // filter coffees
-
         const products = await db.collection("coffees-teste").find().toArray();
 
         res.status(201).send(products);
