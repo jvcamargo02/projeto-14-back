@@ -4,13 +4,13 @@ import { v4 as uuid } from "uuid";
 
 export async function signUp(req, res) {
     const userData = res.locals.user;
-
+console.log(userData)
     try {
         const db = getDb();
         const validation = await db.collection("plans").findOne({
             selectPlanId: userData.selectPlanId
         });
-
+console.log(validation)
         await db.collection("users").insertOne({
             ...userData,
             validation: dayjs().add(validation.monthsTillExpire, "month").format("DD/MM/YY")
