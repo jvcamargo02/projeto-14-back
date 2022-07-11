@@ -14,7 +14,7 @@ export async function signUpValidate(req, res, next) {
         email: joi.string().email().required(),
         password: joi.string().required(),
         selectPlanId: joi.number().required(),
-        capsules: joi.string().required(),
+        capsules: joi.number().min(3).max(40).required(),
         userPaymentData: joi.object().required(),
         userAddress: joi.object().required()
     });

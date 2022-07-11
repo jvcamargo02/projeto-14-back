@@ -9,7 +9,7 @@ const mongoClient = new MongoClient(process.env.MONGO_URI);
 mongoClient
     .connect()
     .then(() => {
-        db = mongoClient.db(process.env.TESTE_DATABASE);
+        db = mongoClient.db(process.env.MONGO_DATABASE);
         console.log("conectou");
     })
     .catch(() => {

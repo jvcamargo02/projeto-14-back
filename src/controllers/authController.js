@@ -6,7 +6,17 @@ export async function signUp(req, res) {
 
     try {
         const db = getDb();
-        await db.collection("users").insertOne(userData);
+        await db
+            .collection("users")
+            .insertOne({ ...userData, remainingDeliveries: userData.selectPlanId * 4 });
+
+        const newUser = await db.collection("users").findOne(userData);
+
+        await db.collection("shopping-cart").insertOne({
+            userId: newUser._id,
+            cart: [],
+            lastPurchaseDate: ""
+        });
 
         res.status(201).send("Created user");
     } catch {
@@ -18,7 +28,7 @@ export async function login(req, res) {
     const db = getDb();
     const userData = res.locals.user;
     const userSession = await db.collection("sessions").findOne({
-        id: userData._id
+        userId: userData._id
     });
 
     const token = uuid();
