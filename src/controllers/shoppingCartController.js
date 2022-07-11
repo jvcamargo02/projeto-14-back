@@ -182,13 +182,6 @@ export async function confirmPurchase(req, res) {
 
         for (let i = 0; i < 7; i++) {
             const date = dayjs().day(i).format("DD/MM/YY");
-            if (date > user.validation) {
-                return res
-                    .status(409)
-                    .send(
-                        "Your plan has expired :( If you wish to continue using our services, please consider renewing your plan."
-                    );
-            }
 
             if (date === cart.lastPurchaseDate)
                 return res
@@ -196,6 +189,14 @@ export async function confirmPurchase(req, res) {
                     .send(
                         "You already made a purchase this week! Please wait next week to put a new order."
                     );
+        }
+
+        if (dayjs().isAfter(dayjs(user.validation))) {
+            return res
+                .status(409)
+                .send(
+                    "Your plan has expired :( If you wish to continue using our services, please consider renewing your plan."
+                );
         }
 
         await db.collection("shopping-carts").updateOne(
