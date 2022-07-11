@@ -169,6 +169,7 @@ export async function subtractProductCounter(req, res) {
 
 export async function confirmPurchase(req, res) {
     const user = res.locals.user;
+    const shippingAdress = req.body;
 
     try {
         const db = getDb();
@@ -205,6 +206,13 @@ export async function confirmPurchase(req, res) {
             },
             { $set: { cart: [], lastPurchaseDate: dayjs().format("DD/MM/YY") } }
         );
+
+        await db
+            .collection("shopping-history")
+            .updateOne(
+                { userId: user._id },
+                { $push: { history: { date: dayjs().format("DD/MM/YY"), shippingAdress, cart } } }
+            );
 
         res.status(201).send();
     } catch (err) {
