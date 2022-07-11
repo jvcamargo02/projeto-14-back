@@ -44,11 +44,11 @@ export async function login(req, res) {
 
     const token = uuid();
 
-    if (userSession) {
+/*     if (userSession) {
         await db.collection("sessions").deleteOne({
             userId: userData._id
         });
-    }
+    } */
 
     try {
         await db.collection("sessions").insertOne({

@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import authRoute from "./routes/authRoute.js"
 import productsRouter from "./routes/productsRoute.js";
 import shoppingCartRouter from "./routes/shoppingCartRoute.js";
+import userConfig from "./routes/userConfig.js"
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(authRoute)
 
 app.use("/products", productsRouter);
 app.use("/shopping-cart", shoppingCartRouter);
+app.use(userConfig)
 
 app.get("/", (req, res) => {
     console.log("aa");
