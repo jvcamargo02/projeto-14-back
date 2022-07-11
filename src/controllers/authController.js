@@ -12,7 +12,7 @@ export async function signUp(req, res) {
 
         const newUser = await db.collection("users").findOne(userData);
 
-        await db.collection("shopping-cart").insertOne({
+        await db.collection("shopping-carts").insertOne({
             userId: newUser._id,
             cart: [],
             lastPurchaseDate: ""
@@ -33,11 +33,11 @@ export async function login(req, res) {
 
     const token = uuid();
 
-    if (userSession) {
+/*     if (userSession) {
         await db.collection("sessions").deleteOne({
             userId: userData._id
         });
-    }
+    } */
 
     try {
         await db.collection("sessions").insertOne({
